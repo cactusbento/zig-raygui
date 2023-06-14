@@ -10,6 +10,7 @@ pub fn build(b: *std.build.Builder) void {
     exe.addIncludePath("lib/headers");
 
     exe.linkLibC();
+    exe.linkSystemLibrary("raylib");
     exe.setTarget(target);
     exe.setBuildMode(mode);
     exe.install();
