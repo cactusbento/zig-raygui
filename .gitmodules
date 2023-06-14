@@ -1,0 +1,3 @@
+[submodule "lib/raygui"]
+	path = lib/raygui
+	url = git@github.com:raysan5/raygui.git
