@@ -135,8 +135,8 @@ pub const Window = struct {
     /// Draw/Update loop should handle the destruction of the window
     /// Will loop through self.elements to draw what it has.
     pub fn draw(self: *Self) void {
-        const mX: f32 = @intToFloat(f32, c.GetMouseX());
-        const mY: f32 = @intToFloat(f32, c.GetMouseY());
+        const mX: f32 = @floatFromInt(f32, c.GetMouseX());
+        const mY: f32 = @floatFromInt(f32, c.GetMouseY());
 
         // Checks if mouse is on titlebar,
         // Valid area does not include the close button.
@@ -165,10 +165,10 @@ pub const Window = struct {
 
         // Draw window and its contents
         self.closed = c.GuiWindowBox(self.rect, @as([*c]const u8, self.name.ptr)) != 0;
-        for (self.elements.items) |*elem, i| {
+        for (self.elements.items, 0..) |*elem, i| {
             elem.move(
                 self.rect.x + self.hPad,
-                self.rect.y + self.titleBarHeight + self.vPad + @intToFloat(f32, i) * (self.vPad + elem.getRect().height),
+                self.rect.y + self.titleBarHeight + self.vPad + @floatFromInt(f32, i) * (self.vPad + elem.getRect().height),
             );
 
             elem.draw();
@@ -177,22 +177,22 @@ pub const Window = struct {
 
     fn boundsCheck(self: *Self) void {
         if (self.rect.x < 0) {
-            self.rect.x += @intToFloat(f32, std.math.absInt(@floatToInt(i32, self.rect.x)) catch 0);
+            self.rect.x += @floatFromInt(f32, std.math.absInt(@intFromFloat(i32, self.rect.x)) catch 0);
         }
         if (self.rect.y < 0) {
-            self.rect.y += @intToFloat(f32, std.math.absInt(@floatToInt(i32, self.rect.y)) catch 0);
+            self.rect.y += @floatFromInt(f32, std.math.absInt(@intFromFloat(i32, self.rect.y)) catch 0);
         }
 
-        const screenWidth = @intToFloat(f32, c.GetScreenWidth());
-        const screenHeight = @intToFloat(f32, c.GetScreenHeight());
+        const screenWidth = @floatFromInt(f32, c.GetScreenWidth());
+        const screenHeight = @floatFromInt(f32, c.GetScreenHeight());
 
         if (self.rect.x + self.rect.width > screenWidth) {
             const toMove = (self.rect.x + self.rect.width) - screenWidth;
-            self.rect.x -= @intToFloat(f32, std.math.absInt(@floatToInt(i32, toMove)) catch 0);
+            self.rect.x -= @floatFromInt(f32, std.math.absInt(@intFromFloat(i32, toMove)) catch 0);
         }
         if (self.rect.y + self.titleBarHeight > screenHeight) {
             const toMove = (self.rect.y + self.titleBarHeight) - screenHeight;
-            self.rect.y -= @intToFloat(f32, std.math.absInt(@floatToInt(i32, toMove)) catch 0);
+            self.rect.y -= @floatFromInt(f32, std.math.absInt(@intFromFloat(i32, toMove)) catch 0);
         }
     }
 
@@ -257,10 +257,10 @@ pub const GroupBox = struct {
     /// Will loop through self.elements to draw what it has.
     pub fn draw(self: *Self) void {
         self.closed = c.GuiGroupBox(self.rect, @as([*c]const u8, self.name.ptr)) != 0;
-        for (self.elements.items) |*elem, i| {
+        for (self.elements.items, 0..) |*elem, i| {
             elem.move(
                 self.rect.x + self.borderWidth + self.hPad,
-                self.rect.y + self.borderWidth + self.vPad + @intToFloat(f32, i) * (self.vPad + elem.getRect().height),
+                self.rect.y + self.borderWidth + self.vPad + @floatFromInt(f32, i) * (self.vPad + elem.getRect().height),
             );
 
             elem.draw();
