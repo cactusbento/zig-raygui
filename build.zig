@@ -15,6 +15,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
+    exe.emit_docs = .emit;
     exe.linkLibC();
     exe.addIncludePath("lib/headers");
     exe.linkSystemLibrary("raylib");

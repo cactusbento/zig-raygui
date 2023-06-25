@@ -1,5 +1,9 @@
 const std = @import("std");
-const rgui = @import("raygui.zig");
+
+pub const raygui = @import("raygui.zig");
+const containers = raygui.containers;
+const elements = raygui.elements;
+
 const ray = @cImport({
     @cInclude("raylib.h");
 });
@@ -22,28 +26,28 @@ pub fn main() !void {
 
     ray.SetTargetFPS(60);
 
-    var test_checkbox = rgui.Checkbox.init("TestCheckBox", .{});
-    var test_button = rgui.Button.init("TestButtonA", .{ .width = 100, .height = 20 });
-    var openWindow = rgui.Button.init("open testWindow", .{
+    var test_checkbox = elements.Checkbox.init("TestCheckBox", .{});
+    var test_button = elements.Button.init("TestButtonA", .{ .width = 100, .height = 20 });
+    var openWindow = elements.Button.init("open testWindow", .{
         .x = 50,
         .y = 50,
         .width = 125,
         .height = 20,
     });
-    var testWindow = rgui.Window.init("testWindow", alloc, .{
+    var testWindow = containers.Window.init("testWindow", alloc, .{
         .x = 100,
         .y = 100,
         .width = 300,
         .height = 200,
     });
 
-    var testGroupBox = rgui.GroupBox.init("testGroupBox", alloc, .{
+    var testGroupBox = containers.GroupBox.init("testGroupBox", alloc, .{
         .x = 300,
         .y = 200,
         .width = 120,
         .height = 40,
     });
-    try testGroupBox.append(.{ .button = rgui.Button.init("GBButton", .{ .width = 100 }) });
+    try testGroupBox.append(.{ .button = elements.Button.init("GBButton", .{ .width = 100 }) });
 
     try testWindow.append(.{ .button = test_button });
     try testWindow.append(.{ .checkbox = test_checkbox });
