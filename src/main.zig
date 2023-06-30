@@ -53,6 +53,12 @@ pub fn main() !void {
     try testWindow.append(.{ .button = test_button });
     try testWindow.append(.{ .checkbox = test_checkbox });
 
+    var test_toggle = elements.Toggle.init("Toggle Test", .{ .width = 100 });
+    var test_label = elements.Label.init("Hello World!", .{
+        .x = 400,
+        .y = 400,
+    });
+
     while (!ray.WindowShouldClose()) {
         // Frame Work
         ray.BeginDrawing();
@@ -60,6 +66,8 @@ pub fn main() !void {
         ray.ClearBackground(ray.RAYWHITE);
 
         testGroupBox.draw();
+        test_toggle.draw();
+        test_label.draw();
 
         // Will also draw what's inside self.elements.
         // So, it will draw testButton and testCheckBox
