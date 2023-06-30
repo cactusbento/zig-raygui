@@ -18,12 +18,7 @@ const c = @cImport({
 pub const Button = struct {
     const Self = @This();
 
-    rect: c.Rectangle = .{
-        .x = 0,
-        .y = 0,
-        .width = 0,
-        .height = 0,
-    },
+    rect: c.Rectangle = .{},
     name: []const u8,
 
     // Button state
