@@ -18,6 +18,7 @@ pub fn build(b: *std.Build) void {
     exe.emit_docs = .emit;
     exe.linkLibC();
     exe.addIncludePath("lib/headers");
+
     exe.linkSystemLibrary("raylib");
     b.installArtifact(exe);
 

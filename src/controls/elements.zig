@@ -3,7 +3,8 @@
 
 const std = @import("std");
 
-const Rect = @import("../raygui.zig").Rect;
+const rgui = @import("../raygui.zig");
+const Rect = rgui.Rect;
 
 const c = @cImport({
     @cInclude("raylib.h");

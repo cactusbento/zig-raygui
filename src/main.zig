@@ -8,6 +8,7 @@ const ray = @cImport({
     @cInclude("raylib.h");
 });
 
+/// This is a test program to visually inspect the work done in this repository.
 pub fn main() !void {
     const screenWidth = 160 * 5;
     const screenHeight = 160 * 4;

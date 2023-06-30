@@ -1,4 +1,5 @@
-//! Custom bindings for raygui
+//! Custom bindings for raygui.
+//!
 //! The main goal is to object orient some
 //! components to more easily make UIs.
 
