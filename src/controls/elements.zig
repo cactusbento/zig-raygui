@@ -34,7 +34,7 @@ pub const Label = struct {
     }
 
     pub fn draw(self: *Self) void {
-        _ = c.GuiLabel(self.rect, @as([*c]const u8, self.name.ptr));
+        _ = c.GuiLabel(self.rect, @as([*c]const u8, self.text.ptr));
     }
 
     pub fn move(self: *Self, x: f32, y: f32) void {

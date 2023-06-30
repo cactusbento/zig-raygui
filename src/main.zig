@@ -53,10 +53,14 @@ pub fn main() !void {
     try testWindow.append(.{ .button = test_button });
     try testWindow.append(.{ .checkbox = test_checkbox });
 
-    var test_toggle = elements.Toggle.init("Toggle Test", .{ .width = 100 });
+    var test_toggle = elements.Toggle.init("Toggle Test", .{
+        .x = 200,
+        .width = 100,
+    });
     var test_label = elements.Label.init("Hello World!", .{
         .x = 400,
         .y = 400,
+        .width = 100,
     });
 
     while (!ray.WindowShouldClose()) {
