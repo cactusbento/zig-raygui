@@ -156,7 +156,7 @@ pub const Toggle = struct {
     pub fn draw(self: *Self) void {
         const prev_val = self.value;
 
-        if (c.GuiCheckBox(
+        if (c.GuiToggle(
             self.rect,
             @as([*c]const u8, self.name.ptr),
             &self.value,
