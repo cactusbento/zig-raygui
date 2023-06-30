@@ -14,16 +14,16 @@ const c = @cImport({
     @cInclude("raygui.h");
 });
 
-/// The basic label button.
+/// The basic label.
 pub const Label = struct {
     const Self = @This();
 
     rect: c.Rectangle,
-    name: []const u8,
+    text: []const u8,
 
-    pub fn init(name: []const u8, rect: Rect) Self {
+    pub fn init(text: []const u8, rect: Rect) Self {
         return .{
-            .name = name,
+            .text = text,
             .rect = .{
                 .x = rect.x,
                 .y = rect.y,
