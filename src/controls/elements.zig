@@ -132,6 +132,9 @@ pub const Checkbox = struct {
 };
 
 /// The basic Raylib toggle.
+///
+/// Look, this library is the first time I'm touching raygui, and I don't know if
+/// GuiToggle is supposed to look like a button.
 pub const Toggle = struct {
     const Self = @This();
 
