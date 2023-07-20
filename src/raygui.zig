@@ -82,6 +82,8 @@ pub const Element = union(enum) {
 
     checkbox: elements.Checkbox,
     button: elements.Button,
+    label: elements.Label,
+    toggle: elements.Toggle,
 
     pub fn draw(self: *Self) void {
         switch (self.*) {
