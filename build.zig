@@ -7,6 +7,10 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    _ = b.addModule("raygui-zig", .{
+        .source_file = "src/raygui.zig",
+    });
+
     const exe = b.addExecutable(.{
         .name = "zigRayGuiBindings",
         // In this case the main source file is merely a path, however, in more
