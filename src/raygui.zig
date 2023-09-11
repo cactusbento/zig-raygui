@@ -6,10 +6,10 @@
 const std = @import("std");
 
 /// Container items from Raygui
-pub const containers = @import("controls/containers.zig");
+pub const containers = @import("widgets/containers.zig");
 
 /// Control elements from Raugui
-pub const elements = @import("controls/elements.zig");
+pub const elements = @import("widgets/elements.zig");
 
 const c = @cImport({
     @cInclude("raylib.h");
@@ -34,51 +34,15 @@ pub const Rect = struct {
 };
 
 // --------------------------------------------------------------------
-//                           CONTAINERS
+//                          WIDGETS
 // --------------------------------------------------------------------
 
-/// Interface for containers
-/// Raygui constainer/separator controls.
-/// Currently Sits unused
-pub const Container = union(enum) {
+/// Interface for all the elements provided by this library.
+pub const Widget = union(enum) {
     const Self = @This();
 
     window: containers.Window,
     groupbox: containers.GroupBox,
-
-    pub fn draw(self: *Self) void {
-        switch (self.*) {
-            inline else => |*case| case.draw(),
-        }
-    }
-
-    pub fn getRect(self: *Self) c.Rectangle {
-        switch (self.*) {
-            inline else => |*case| return case.*.rect,
-        }
-    }
-
-    pub fn resize(self: *Self, w: f32, h: f32) void {
-        switch (self.*) {
-            inline else => |*case| case.resize(w, h),
-        }
-    }
-
-    pub fn move(self: *Self, x: f32, y: f32) void {
-        switch (self.*) {
-            inline else => |*case| case.move(x, y),
-        }
-    }
-};
-
-// --------------------------------------------------------------------
-//                           ELEMENTS
-// --------------------------------------------------------------------
-
-/// Interface for primitives
-/// RayGui Controls / Advanced Controls
-pub const Element = union(enum) {
-    const Self = @This();
 
     checkbox: elements.Checkbox,
     button: elements.Button,
