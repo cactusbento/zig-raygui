@@ -8,13 +8,7 @@ const rgui = @import("../raygui.zig");
 const Rect = rgui.Rect;
 const Element = rgui.Element;
 
-const c = @cImport({
-    @cInclude("raylib.h");
-
-    // import raygui
-    @cDefine("RAYGUI_IMPLEMENTATION", {});
-    @cInclude("raygui.h");
-});
+const c = @import("../c.zig");
 
 /// A raygui window. Contains an std.ArrayList(raygui.Element) to store raygui elements.
 pub const Window = struct {

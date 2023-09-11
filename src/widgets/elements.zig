@@ -6,13 +6,7 @@ const std = @import("std");
 const rgui = @import("../raygui.zig");
 const Rect = rgui.Rect;
 
-const c = @cImport({
-    @cInclude("raylib.h");
-
-    // import raygui
-    @cDefine("RAYGUI_IMPLEMENTATION", {});
-    @cInclude("raygui.h");
-});
+const c = @import("../c.zig");
 
 /// The basic label.
 pub const Label = struct {

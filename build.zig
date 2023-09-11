@@ -8,7 +8,7 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     const raygui = b.addModule("raygui-zig", .{
-        .source_file = "src/raygui.zig",
+        .source_file = .{ .path = "src/raygui.zig" },
     });
 
     const exe = b.addExecutable(.{
@@ -21,7 +21,7 @@ pub fn build(b: *std.Build) void {
     });
     exe.linkLibC();
     exe.linkSystemLibrary("raylib");
-    exe.addIncludePath("lib/headers");
+    exe.addIncludePath(.{ .path = "lib/headers" });
 
     exe.addModule("raygui", raygui);
 
@@ -49,7 +49,7 @@ pub fn build(b: *std.Build) void {
 
     unit_tests.linkLibC();
     unit_tests.linkSystemLibrary("raylib");
-    unit_tests.addIncludePath("lib/headers");
+    unit_tests.addIncludePath(.{ .path = "lib/headers" });
 
     const run_unit_tests = b.addRunArtifact(unit_tests);
 

@@ -11,13 +11,7 @@ pub const containers = @import("widgets/containers.zig");
 /// Control elements from Raugui
 pub const elements = @import("widgets/elements.zig");
 
-const c = @cImport({
-    @cInclude("raylib.h");
-
-    // import raygui
-    @cDefine("RAYGUI_IMPLEMENTATION", {});
-    @cInclude("raygui.h");
-});
+const c = @import("c.zig");
 
 const rgui = @This();
 

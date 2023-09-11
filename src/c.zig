@@ -1,4 +1,4 @@
-const c = @cImport({
+pub usingnamespace @cImport({
     @cInclude("raylib.h");
 
     // import raygui
