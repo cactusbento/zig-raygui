@@ -6,14 +6,14 @@ const elements = @import("elements.zig");
 
 const rgui = @import("../raygui.zig");
 const Rect = rgui.Rect;
-const Element = rgui.Element;
+const Widget = rgui.Widget;
 
 const c = @import("../c.zig");
 
 /// A raygui window. Contains an std.ArrayList(raygui.Element) to store raygui elements.
 pub const Window = struct {
     const Self = @This();
-    const e = Element;
+    const e = Widget;
 
     rect: c.Rectangle,
     name: []const u8,
@@ -137,7 +137,7 @@ pub const Window = struct {
 /// See containers.Window for docs. All containers are very similar.
 pub const GroupBox = struct {
     const Self = @This();
-    const e = Element;
+    const e = Widget;
 
     rect: c.Rectangle,
     name: []const u8,
