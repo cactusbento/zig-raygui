@@ -53,15 +53,14 @@ pub fn main() !void {
     try testWindow.append(.{ .button = test_button });
     try testWindow.append(.{ .checkbox = test_checkbox });
 
-    var test_toggle = elements.Toggle.init("Toggle Test", .{
-        .x = 200,
-        .width = 100,
-    });
     var test_label = elements.Label.init("Hello World!", .{
         .x = 400,
         .y = 400,
-        .width = 100,
+        .width = 200,
+        .height = 20,
     });
+
+    std.debug.print("Default Font: {}\n", .{raygui.c.GetFontDefault()});
 
     while (!ray.WindowShouldClose()) {
         // Frame Work
@@ -70,7 +69,6 @@ pub fn main() !void {
         ray.ClearBackground(ray.RAYWHITE);
 
         testGroupBox.draw();
-        test_toggle.draw();
         test_label.draw();
 
         // Will also draw what's inside self.elements.
