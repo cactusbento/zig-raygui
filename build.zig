@@ -7,7 +7,7 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    _ = b.addModule("raygui-zig", .{
+    const raygui = b.addModule("raygui-zig", .{
         .source_file = "src/raygui.zig",
     });
 
@@ -19,11 +19,12 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-    exe.emit_docs = .emit;
     exe.linkLibC();
-    exe.addIncludePath("lib/headers");
-
     exe.linkSystemLibrary("raylib");
+
+    exe.addIncludePath("lib/headers");
+    exe.addModule("raygui", raygui);
+
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);
