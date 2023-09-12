@@ -35,12 +35,14 @@ pub fn main() !void {
         .width = 125,
         .height = 20,
     });
+
     var testWindow = containers.Window.init("testWindow", alloc, .{
         .x = 100,
         .y = 100,
         .width = 300,
         .height = 200,
     });
+    defer testWindow.deinit();
 
     var testGroupBox = containers.GroupBox.init("testGroupBox", alloc, .{
         .x = 300,
@@ -48,28 +50,17 @@ pub fn main() !void {
         .width = 120,
         .height = 40,
     });
-    try testGroupBox.append(.{ .button = elements.Button.init("GBButton", .{ .width = 100 }) });
+    try testGroupBox.append(.{ .button = @constCast(&elements.Button.init("GBButton", .{ .width = 100 })) });
 
-    try testWindow.append(.{ .button = test_button });
-    try testWindow.append(.{ .checkbox = test_checkbox });
-
-    var test_label = elements.Label.init("Hello World!", .{
-        .x = 400,
-        .y = 400,
-        .width = 200,
-        .height = 20,
-    });
-
-    std.debug.print("Default Font: {}\n", .{raygui.c.GetFontDefault()});
+    try testWindow.append(.{ .button = &test_button });
+    try testWindow.append(.{ .checkbox = &test_checkbox });
+    try testWindow.append(.{ .groupbox = &testGroupBox });
 
     while (!ray.WindowShouldClose()) {
         // Frame Work
         ray.BeginDrawing();
         defer ray.EndDrawing();
         ray.ClearBackground(ray.RAYWHITE);
-
-        testGroupBox.draw();
-        test_label.draw();
 
         // Will also draw what's inside self.elements.
         // So, it will draw testButton and testCheckBox

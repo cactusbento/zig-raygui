@@ -10,10 +10,11 @@ const Widget = rgui.Widget;
 
 const c = @import("../c.zig");
 
+const WidgetArrayList = std.ArrayList(Widget);
+
 /// A raygui window. Contains an std.ArrayList(raygui.Element) to store raygui elements.
 pub const Window = struct {
     const Self = @This();
-    const e = Widget;
 
     rect: c.Rectangle,
     name: []const u8,
@@ -30,7 +31,7 @@ pub const Window = struct {
     vPad: f32 = 5,
 
     /// raygui.Elements inside window.
-    elements: std.ArrayList(e),
+    widgets: WidgetArrayList,
 
     /// Recommended Allocator: ArenaAllocator.
     /// Other allocators must use deinit.
@@ -43,18 +44,18 @@ pub const Window = struct {
                 .width = rect.width,
                 .height = rect.height,
             },
-            .elements = std.ArrayList(e).init(alloc),
+            .widgets = WidgetArrayList.init(alloc),
         };
     }
 
     /// Only needed if allocator is not ArenaAllocator.
     pub fn deinit(self: *Self) void {
-        self.elements.deinit();
+        self.widgets.deinit();
     }
 
     /// Add a raygui.Element to the container
-    pub fn append(self: *Self, elem: e) !void {
-        try self.elements.append(elem);
+    pub fn append(self: *Self, elem: Widget) !void {
+        try self.widgets.append(elem);
     }
 
     /// Draw/Update loop should handle the destruction of the window
@@ -90,7 +91,7 @@ pub const Window = struct {
 
         // Draw window and its contents
         self.closed = c.GuiWindowBox(self.rect, @as([*c]const u8, self.name.ptr)) != 0;
-        for (self.elements.items, 0..) |*elem, i| {
+        for (self.widgets.items, 0..) |*elem, i| {
             elem.move(
                 self.rect.x + self.hPad,
                 self.rect.y + self.titleBarHeight + self.vPad + @as(f32, @floatFromInt(i)) * (self.vPad + elem.getRect().height),
@@ -137,7 +138,6 @@ pub const Window = struct {
 /// See containers.Window for docs. All containers are very similar.
 pub const GroupBox = struct {
     const Self = @This();
-    const e = Widget;
 
     rect: c.Rectangle,
     name: []const u8,
@@ -153,7 +153,7 @@ pub const GroupBox = struct {
     vPad: f32 = 5,
 
     // elements.Elements inside GroupBox.
-    elements: std.ArrayList(e),
+    elements: WidgetArrayList,
 
     /// Recommended Allocator: ArenaAllocator.
     /// Other allocators must use deinit.
@@ -166,7 +166,7 @@ pub const GroupBox = struct {
                 .width = rect.width,
                 .height = rect.height,
             },
-            .elements = std.ArrayList(e).init(alloc),
+            .elements = WidgetArrayList.init(alloc),
         };
     }
 
@@ -175,7 +175,7 @@ pub const GroupBox = struct {
         self.elements.deinit();
     }
 
-    pub fn append(self: *Self, elem: e) !void {
+    pub fn append(self: *Self, elem: Widget) !void {
         try self.elements.append(elem);
     }
 
@@ -191,6 +191,190 @@ pub const GroupBox = struct {
 
             elem.draw();
         }
+    }
+
+    pub fn move(self: *Self, x: f32, y: f32) void {
+        self.rect.x = x;
+        self.rect.y = y;
+    }
+
+    pub fn resize(self: *Self, width: f32, height: f32) void {
+        self.rect.width = width;
+        self.rect.height = height;
+    }
+};
+
+/// A raygui Line.
+/// Used as a separator.
+///
+/// Can contain text.
+pub const Line = struct {
+    const Self = @This();
+
+    rect: c.Rectangle,
+    text: []const u8,
+
+    // Line Properties
+    borderWidth: f32 = 5,
+
+    /// Recommended Allocator: ArenaAllocator.
+    /// Other allocators must use deinit.
+    pub fn init(name: []const u8, rect: Rect) Self {
+        return .{
+            .name = name,
+            .rect = .{
+                .x = rect.x,
+                .y = rect.y,
+                .width = rect.width,
+                .height = rect.height,
+            },
+        };
+    }
+
+    /// Draw/Update loop should handle the destruction of the Line
+    /// Will loop through self.elements to draw what it has.
+    pub fn draw(self: *Self) void {
+        _ = c.GuiLine(self.rect, @as([*c]const u8, self.text.ptr));
+    }
+
+    pub fn move(self: *Self, x: f32, y: f32) void {
+        self.rect.x = x;
+        self.rect.y = y;
+    }
+
+    pub fn resize(self: *Self, width: f32, height: f32) void {
+        self.rect.width = width;
+        self.rect.height = height;
+    }
+};
+
+/// A raygui Panel.
+/// Used to group controls.
+///
+/// Can contain text.
+pub const Panel = struct {
+    const Self = @This();
+
+    rect: c.Rectangle,
+    text: []const u8,
+
+    // Panel Properties
+    borderWidth: f32 = 5,
+
+    /// Recommended Allocator: ArenaAllocator.
+    /// Other allocators must use deinit.
+    pub fn init(text: []const u8, rect: Rect) Self {
+        return .{
+            .text = text,
+            .rect = .{
+                .x = rect.x,
+                .y = rect.y,
+                .width = rect.width,
+                .height = rect.height,
+            },
+        };
+    }
+
+    /// Draw/Update loop should handle the destruction of the Panel
+    /// Will loop through self.elements to draw what it has.
+    pub fn draw(self: *Self) void {
+        _ = c.GuiPanel(self.rect, @as([*c]const u8, self.text.ptr));
+    }
+
+    pub fn move(self: *Self, x: f32, y: f32) void {
+        self.rect.x = x;
+        self.rect.y = y;
+    }
+
+    pub fn resize(self: *Self, width: f32, height: f32) void {
+        self.rect.width = width;
+        self.rect.height = height;
+    }
+};
+
+/// A raygui TabBar.
+pub const TabBar = struct {
+    const Self = @This();
+    const e = Widget;
+
+    rect: c.Rectangle,
+    texts: [][]const u8,
+
+    // TabBar Properties
+    borderWidth: f32 = 5,
+    active: i32,
+
+    /// Recommended Allocator: ArenaAllocator.
+    /// Other allocators must use deinit.
+    pub fn init(names: [][]const u8, rect: Rect) Self {
+        return .{
+            .names = names,
+            .rect = .{
+                .x = rect.x,
+                .y = rect.y,
+                .width = rect.width,
+                .height = rect.height,
+            },
+        };
+    }
+
+    /// Draw/Update loop should handle the destruction of the TabBar
+    /// Will loop through self.elements to draw what it has.
+    pub fn draw(self: *Self) void {
+        _ = c.GuiTabBar(self.rect, @ptrCast(self.texts), @intCast(self.texts.len), &self.active);
+    }
+
+    pub fn move(self: *Self, x: f32, y: f32) void {
+        self.rect.x = x;
+        self.rect.y = y;
+    }
+
+    pub fn resize(self: *Self, width: f32, height: f32) void {
+        self.rect.width = width;
+        self.rect.height = height;
+    }
+};
+
+/// A raygui ScrollPanel.
+pub const ScrollPanel = struct {
+    const Self = @This();
+    const e = Widget;
+
+    rect: c.Rectangle,
+    text: []const u8,
+
+    // ScrollPanel Properties
+    content: c.Rectangle,
+    borderWidth: f32 = 5,
+    scroll: c.Vector2 = undefined,
+    view: c.Rectangle = undefined,
+
+    /// Recommended Allocator: ArenaAllocator.
+    /// Other allocators must use deinit.
+    pub fn init(text: []const []const u8, rect: Rect, content: Rect, scroll: *c.Vector2, view: *Rect) Self {
+        _ = view;
+        _ = scroll;
+        return .{
+            .text = text,
+            .rect = .{
+                .x = rect.x,
+                .y = rect.y,
+                .width = rect.width,
+                .height = rect.height,
+            },
+            .content = .{
+                .x = content.x,
+                .y = content.y,
+                .width = content.width,
+                .height = content.height,
+            },
+        };
+    }
+
+    /// Draw/Update loop should handle the destruction of the ScrollPanel
+    /// Will loop through self.elements to draw what it has.
+    pub fn draw(self: *Self) void {
+        _ = c.GuiScrollPanel(self.rect, @as([*c]const u8, self.text.ptr), self.content, &self.scroll, &self.view);
     }
 
     pub fn move(self: *Self, x: f32, y: f32) void {
