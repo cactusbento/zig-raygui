@@ -70,12 +70,24 @@ pub fn main() !void {
     try testWindow.append(.{ .checkbox = &test_checkbox });
     try testWindow.append(.{ .groupbox = &testGroupBox });
 
+    var testDropDown = elements.DropdownBox.init(alloc, .{
+        .x = 100,
+        .y = 200,
+        .width = 200,
+        .height = 20,
+    });
+    defer testDropDown.deinit();
+    try testDropDown.add("lol");
+    try testDropDown.add("kek");
+
     while (!c.WindowShouldClose()) {
         // Frame Work
         c.BeginDrawing();
         defer c.EndDrawing();
         c.ClearBackground(c.RAYWHITE);
         menubar.draw();
+
+        testDropDown.draw();
 
         // Will also draw what's inside self.elements.
         // So, it will draw testButton and testCheckBox

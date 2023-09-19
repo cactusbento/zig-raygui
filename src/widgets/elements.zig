@@ -80,6 +80,93 @@ pub const Button = struct {
     }
 };
 
+/// The raygui DropdownBox.
+pub const DropdownBox = struct {
+    const Self = @This();
+
+    allocator: std.mem.Allocator,
+
+    rect: c.Rectangle,
+    list: std.ArrayList(u8),
+    list_buttons: std.ArrayList(Button),
+
+    // DropdownBox state
+    edit_mode: bool = false,
+
+    open: bool = false,
+
+    // itemSelected
+    active: i32 = 0,
+
+    pub fn init(allocator: std.mem.Allocator, rect: Rect) Self {
+        return .{
+            .allocator = allocator,
+            .list = std.ArrayList(u8).init(allocator),
+            .list_buttons = std.ArrayList(Button).init(allocator),
+            .rect = .{
+                .x = rect.x,
+                .y = rect.y,
+                .width = rect.width,
+                .height = rect.height,
+            },
+        };
+    }
+
+    pub fn deinit(self: *Self) void {
+        self.list.deinit();
+        self.list_buttons.deinit();
+    }
+
+    pub fn add(self: *Self, text: []const u8) !void {
+        var nB = Button.init(text, .{});
+        try self.list_buttons.append(nB);
+
+        try self.list.appendSlice(text);
+        try self.list.append(';');
+    }
+
+    pub fn draw(self: *Self) void {
+        // Draw the main button.
+        if (c.GuiDropdownBox(
+            self.rect,
+            @ptrCast(self.list.items),
+            &self.active,
+            self.edit_mode,
+        ) != 0) {
+            self.open = !self.open;
+        }
+
+        // Draw the buttons to select the active item.
+        if (self.open) {
+            for (self.list_buttons.items, 0..) |*butt, i| {
+                butt.rect = .{
+                    .x = self.rect.x,
+                    .y = self.rect.y + @as(f32, @floatFromInt(i + 1)) * self.rect.height,
+                    .width = self.rect.width,
+                    .height = self.rect.height,
+                };
+
+                butt.draw();
+
+                if (butt.value) {
+                    self.active = @intCast(i);
+                    self.open = false;
+                }
+            }
+        }
+    }
+
+    pub fn move(self: *Self, x: f32, y: f32) void {
+        self.rect.x = x;
+        self.rect.y = y;
+    }
+
+    pub fn resize(self: *Self, w: f32, h: f32) void {
+        self.rect.width = w;
+        self.rect.height = h;
+    }
+};
+
 /// The basic Raylib checkbox.
 pub const Checkbox = struct {
     const Self = @This();

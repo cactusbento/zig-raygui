@@ -73,6 +73,8 @@ pub const MenuBar = struct {
     pub fn draw(self: *MenuBar) void {
         c.DrawRectangleRec(self.rect, c.GRAY);
 
+        // Draw button for each category.
+        // Each category will draw its own list.
         for (self.categories.items, 0..) |*cat, i| {
             const cat_rect = c.Rectangle{
                 .x = 150 * @as(f32, @floatFromInt(i)),
