@@ -125,6 +125,10 @@ pub const DropdownBox = struct {
         try self.list.append(';');
     }
 
+    pub fn getActiveString(self: *Self) []const u8 {
+        return self.list_buttons.items[@intCast(self.active)].name;
+    }
+
     pub fn draw(self: *Self) void {
         // Draw the main button.
         if (c.GuiDropdownBox(

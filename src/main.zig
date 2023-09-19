@@ -111,6 +111,7 @@ pub fn main() !void {
 
         if (test_button.value) {
             std.debug.print("Button Pressed!\n", .{});
+            std.debug.print("DropDown: {s}\n", .{testDropDown.getActiveString()});
         }
 
         // c.DrawFPS(10, 10);
