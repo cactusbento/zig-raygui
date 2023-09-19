@@ -16,7 +16,7 @@ pub const MenuBar = struct {
         allocator: std.mem.Allocator,
 
         /// Whether to show the underlying menu.
-        active: bool = false,
+        open: bool = false,
 
         name: []const u8,
         rect: c.Rectangle,
@@ -39,7 +39,14 @@ pub const MenuBar = struct {
             self.option_list.deinit();
         }
 
+        pub fn add(self: *Category, name: []const u8) !void {
+            var button = elements.Button.init(name, .{});
+            try self.option_list.append(button);
+        }
+
         pub fn draw(self: *Category) void {
+            const prev_button = self.top_level_button.value;
+
             const text_len_px = c.MeasureText(
                 @ptrCast(self.name),
                 @intFromFloat(self.rect.height - 4 - 2),
@@ -48,6 +55,27 @@ pub const MenuBar = struct {
 
             self.top_level_button.rect = self.rect;
             self.top_level_button.draw();
+
+            if (self.top_level_button.value and !prev_button) {
+                self.open = !self.open;
+            }
+
+            if (self.open) {
+                for (self.option_list.items, 0..) |*butt, i| {
+                    butt.rect = .{
+                        .x = self.rect.x,
+                        .y = self.rect.y + @as(f32, @floatFromInt(i + 1)) * self.rect.height,
+                        .width = 100,
+                        .height = self.rect.height,
+                    };
+
+                    butt.draw();
+
+                    if (butt.value) {
+                        self.open = false;
+                    }
+                }
+            }
         }
     };
 

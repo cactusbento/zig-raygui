@@ -39,8 +39,12 @@ pub fn main() !void {
     var menubar_file = custom.MenuBar.Category.init(alloc, "File");
     defer menubar_file.deinit();
 
+    try menubar_file.add("Test");
+
     var menubar_edit = custom.MenuBar.Category.init(alloc, "Edit");
     defer menubar_edit.deinit();
+
+    try menubar_edit.add("Lol");
 
     try menubar.categories.append(&menubar_file);
     try menubar.categories.append(&menubar_edit);
