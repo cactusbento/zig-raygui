@@ -39,7 +39,11 @@ pub fn main() !void {
     var menubar_file = custom.MenuBar.Category.init(alloc, "File");
     defer menubar_file.deinit();
 
+    var menubar_edit = custom.MenuBar.Category.init(alloc, "Edit");
+    defer menubar_edit.deinit();
+
     try menubar.categories.append(&menubar_file);
+    try menubar.categories.append(&menubar_edit);
 
     var test_checkbox = elements.Checkbox.init("TestCheckBox", .{});
     var test_button = elements.Button.init("TestButtonA", .{ .width = 100, .height = 20 });
@@ -88,6 +92,8 @@ pub fn main() !void {
         menubar.draw();
 
         testDropDown.draw();
+
+        menubar.rect.width = @as(f32, @floatFromInt(c.GetRenderWidth()));
 
         // Will also draw what's inside self.elements.
         // So, it will draw testButton and testCheckBox

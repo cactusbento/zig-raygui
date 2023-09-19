@@ -77,8 +77,8 @@ pub const MenuBar = struct {
         // Each category will draw its own list.
         for (self.categories.items, 0..) |*cat, i| {
             const cat_rect = c.Rectangle{
-                .x = 150 * @as(f32, @floatFromInt(i)),
-                .width = 150,
+                .x = self.rect.x + cat.*.rect.width * @as(f32, @floatFromInt(i)),
+                .width = cat.*.rect.width,
 
                 .y = self.rect.y,
                 .height = self.rect.height,
