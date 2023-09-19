@@ -95,6 +95,6 @@ pub fn main() !void {
             std.debug.print("Button Pressed!\n", .{});
         }
 
-        c.DrawFPS(10, 10);
+        // c.DrawFPS(10, 10);
     }
 }
