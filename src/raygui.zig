@@ -10,6 +10,9 @@ pub const containers = @import("widgets/containers.zig");
 /// Control elements from Raugui
 pub const elements = @import("widgets/elements.zig");
 
+/// Custom elements provided by this library.
+pub const custom = @import("widgets/custom.zig");
+
 /// C api made available for more direct contro / access to constants.
 pub const c = @import("c.zig");
 

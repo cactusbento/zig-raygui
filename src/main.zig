@@ -3,8 +3,9 @@ const std = @import("std");
 pub const raygui = @import("raygui.zig");
 const containers = raygui.containers;
 const elements = raygui.elements;
+const custom = raygui.custom;
 
-const ray = @cImport({
+const c = @cImport({
     @cInclude("raylib.h");
 });
 
@@ -20,12 +21,25 @@ pub fn main() !void {
     const alloc = arena.allocator();
 
     // Config
-    ray.SetConfigFlags(ray.FLAG_WINDOW_RESIZABLE);
+    c.SetConfigFlags(c.FLAG_WINDOW_RESIZABLE);
 
-    ray.InitWindow(screenWidth, screenHeight, "raygui test window");
-    defer ray.CloseWindow();
+    c.InitWindow(screenWidth, screenHeight, "raygui test window");
+    defer c.CloseWindow();
 
-    ray.SetTargetFPS(60);
+    c.SetTargetFPS(60);
+
+    var menubar = custom.MenuBar.init(alloc, .{
+        .x = 0,
+        .y = 0,
+        .width = screenWidth,
+        .height = 20,
+    });
+    defer menubar.deinit();
+
+    var menubar_file = custom.MenuBar.Category.init(alloc, "File");
+    defer menubar_file.deinit();
+
+    try menubar.categories.append(&menubar_file);
 
     var test_checkbox = elements.Checkbox.init("TestCheckBox", .{});
     var test_button = elements.Button.init("TestButtonA", .{ .width = 100, .height = 20 });
@@ -56,11 +70,12 @@ pub fn main() !void {
     try testWindow.append(.{ .checkbox = &test_checkbox });
     try testWindow.append(.{ .groupbox = &testGroupBox });
 
-    while (!ray.WindowShouldClose()) {
+    while (!c.WindowShouldClose()) {
         // Frame Work
-        ray.BeginDrawing();
-        defer ray.EndDrawing();
-        ray.ClearBackground(ray.RAYWHITE);
+        c.BeginDrawing();
+        defer c.EndDrawing();
+        c.ClearBackground(c.RAYWHITE);
+        menubar.draw();
 
         // Will also draw what's inside self.elements.
         // So, it will draw testButton and testCheckBox
@@ -80,6 +95,6 @@ pub fn main() !void {
             std.debug.print("Button Pressed!\n", .{});
         }
 
-        ray.DrawFPS(10, 10);
+        c.DrawFPS(10, 10);
     }
 }
