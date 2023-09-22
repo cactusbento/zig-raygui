@@ -157,6 +157,7 @@ pub const Widget = union(enum) {
     button: *elements.Button,
     label: *elements.Label,
     toggle: *elements.Toggle,
+    dropdown: *elements.DropdownBox,
 
     pub fn draw(self: *Self) void {
         switch (self.*) {
