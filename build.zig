@@ -1,6 +1,15 @@
 const std = @import("std");
 
-pub fn addHeaders(exe: *std.Build.CompileStep) void {
+pub fn addHeaders(b: *std.Build, exe: *std.Build.CompileStep) void {
+    const rgui = b.dependency("raygui", .{});
+    exe.addIncludePath(rgui.path("src"));
+
+    exe.addCSourceFile(
+        .{
+            .file = .{ .path = "src/rgui_i.c" },
+            .flags = &[_][]const u8{},
+        },
+    );
     exe.addIncludePath(.{ .path = "lib/headers" });
 }
 
@@ -25,8 +34,8 @@ pub fn build(b: *std.Build) void {
     });
     exe.linkLibC();
     exe.linkSystemLibrary("raylib");
-    exe.addIncludePath(.{ .path = "lib/headers" });
 
+    addHeaders(b, exe);
     exe.addModule("raygui", raygui);
 
     b.installArtifact(exe);

@@ -1,0 +1,10 @@
+.{
+    .name = "zig-raygui",
+    .version = "0.0.1",
+    .dependencies = .{
+        .raygui = .{
+            .url = "https://github.com/raysan5/raygui/archive/refs/tags/4.0.tar.gz",
+            .hash = "1220b64eaeaf55609b3152b64d108ea73981c9689e783bddc68c80e77d275ebac164",
+        },
+    },
+}
