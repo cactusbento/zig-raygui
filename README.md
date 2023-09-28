@@ -2,10 +2,18 @@
 
 A WIP binding for raygui for zig.
 
-Will turn into a library in future using `build.zig`, but for now, I'll just stick with the current setup.
+You must provide a method to use raylib in your project, this can be done using
+```zig
+exe.linkSystemLibrary("raylib");
+```
 
-You must provide the necessary setup to include both `raylib.h` and `raygui.h` in `raygui.zig`.
-This can be done by using `exe.linkSystemLibrary([]const u8)`, `exe.addIncludePath([]const u8)`, or just adding the headers next to `raygui.zig`.
+```zig
+const raylib = b.dependency("raylib");
+b.installArtifact(raylib.artifact("raylib"))
+```
+or any other method.
+
+To actually use this library, add the following to your `build.zig`:
 
 ```zig
 const raygui = b.dependency("raygui-zig");
