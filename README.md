@@ -24,7 +24,7 @@ contain
 const raygui = b.dependency("raygui-zig");
 exe.addCSourceFile(
     .{
-        .file = .{ .path = raygui.path("src/rgui_i.c") },
+        .file = raygui.path("src/rgui_i.c"),
         .flags = &[_][]const u8{},
     },
 );
