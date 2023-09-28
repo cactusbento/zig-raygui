@@ -11,7 +11,7 @@ exe.linkSystemLibrary("raylib");
 const raylib = b.dependency("raylib");
 b.installArtifact(raylib.artifact("raylib"))
 ```
-or any other method.
+or a wrapper such as [Not-Nik/raylib-zig](https://github.com/Not-Nik/raylib-zig).
 
 To actually use this library, add the following to your `build.zig`:
 
