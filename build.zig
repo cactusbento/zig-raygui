@@ -1,24 +1,10 @@
 const std = @import("std");
 
-pub fn addHeaders(b: *std.Build, exe: *std.Build.CompileStep) void {
-    const rgui = b.dependency("raygui", .{});
-    exe.addIncludePath(rgui.path("src"));
-
-    exe.addCSourceFile(
-        .{
-            .file = .{ .path = "src/rgui_i.c" },
-            .flags = &[_][]const u8{},
-        },
-    );
-    exe.addIncludePath(.{ .path = "lib/headers" });
-}
-
-// Although this function looks imperative, note that its job is to
-// declaratively construct a build graph that will be executed by an external
-// runner.
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
+
+    const rgui = b.dependency("raygui", .{});
 
     const raygui = b.addModule("raygui-zig", .{
         .source_file = .{ .path = "src/raygui.zig" },
@@ -26,16 +12,20 @@ pub fn build(b: *std.Build) void {
 
     const exe = b.addExecutable(.{
         .name = "zigRayGuiBindings",
-        // In this case the main source file is merely a path, however, in more
-        // complicated build scripts, this could be a generated file.
         .root_source_file = .{ .path = "src/main.zig" },
         .target = target,
         .optimize = optimize,
     });
     exe.linkLibC();
     exe.linkSystemLibrary("raylib");
+    exe.addIncludePath(rgui.path("src"));
+    exe.addCSourceFile(
+        .{
+            .file = .{ .path = "src/rgui_i.c" },
+            .flags = &[_][]const u8{},
+        },
+    );
 
-    addHeaders(b, exe);
     exe.addModule("raygui", raygui);
 
     b.installArtifact(exe);
