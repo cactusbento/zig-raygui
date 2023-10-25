@@ -19,12 +19,12 @@ pub fn build(b: *std.Build) void {
     exe.linkLibC();
     exe.linkSystemLibrary("raylib");
     exe.addIncludePath(rgui.path("src"));
-    exe.addCSourceFile(
-        .{
-            .file = .{ .path = "src/rgui_i.c" },
-            .flags = &[_][]const u8{},
-        },
-    );
+    // exe.addCSourceFile(
+    //     .{
+    //         .file = .{ .path = "src/rgui_i.c" },
+    //         .flags = &[_][]const u8{},
+    //     },
+    // );
 
     exe.addModule("raygui", raygui);
 

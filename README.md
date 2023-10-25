@@ -23,21 +23,6 @@ exe.addIncludePath(
 );
 ```
 
-## Note
-
-Due to a regression in the zig compiler, your `build.zig` must 
-contain 
-
-```zig
-const raygui = b.dependency("raygui-zig");
-exe.addCSourceFile(
-    .{
-        .file = raygui.path("src/rgui_i.c"),
-        .flags = &[_][]const u8{},
-    },
-);
-```
-
 ## TODO (In order of priority)
 
 * Implement bindings for the rest of `raygui.h`

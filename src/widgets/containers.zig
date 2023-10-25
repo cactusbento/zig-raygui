@@ -103,10 +103,10 @@ pub const Window = struct {
 
     fn boundsCheck(self: *Self) void {
         if (self.rect.x < 0) {
-            self.rect.x += @as(f32, @floatFromInt(std.math.absInt(@as(i32, @intFromFloat(self.rect.x))) catch 0));
+            self.rect.x += @abs(self.rect.x);
         }
         if (self.rect.y < 0) {
-            self.rect.y += @as(f32, @floatFromInt(std.math.absInt(@as(i32, @intFromFloat(self.rect.y))) catch 0));
+            self.rect.y += @abs(self.rect.y);
         }
 
         const screenWidth = @as(f32, @floatFromInt(c.GetScreenWidth()));
@@ -114,11 +114,11 @@ pub const Window = struct {
 
         if (self.rect.x + self.rect.width > screenWidth) {
             const toMove = (self.rect.x + self.rect.width) - screenWidth;
-            self.rect.x -= @as(f32, @floatFromInt(std.math.absInt(@as(i32, @intFromFloat(toMove))) catch 0));
+            self.rect.x -= @abs(toMove);
         }
         if (self.rect.y + self.titleBarHeight > screenHeight) {
             const toMove = (self.rect.y + self.titleBarHeight) - screenHeight;
-            self.rect.y -= @as(f32, @floatFromInt(std.math.absInt(@as(i32, @intFromFloat(toMove))) catch 0));
+            self.rect.y -= @abs(toMove);
         }
     }
 
