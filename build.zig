@@ -8,6 +8,7 @@ pub fn build(b: *std.Build) void {
 
     const raygui = b.addModule("raygui-zig", .{
         .source_file = .{ .path = "src/raygui.zig" },
+        .dependencies = &.{},
     });
 
     const exe = b.addExecutable(.{
